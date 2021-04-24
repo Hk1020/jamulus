@@ -32,7 +32,8 @@ CClient::CClient ( const quint16  iPortNumber,
                    const QString& strMIDISetup,
                    const bool     bNoAutoJackConnect,
                    const QString& strNClientName,
-                   const bool     bNMuteMeInPersonalMix ) :
+                   const bool     bNMuteMeInPersonalMix,
+	           int ipmode	) :
     ChannelInfo                      ( ),
     strClientName                    ( strNClientName ),
     Channel                          ( false ), /* we need a client channel -> "false" */
@@ -64,6 +65,7 @@ CClient::CClient ( const quint16  iPortNumber,
     bEnableOPUS64                    ( false ),
     bJitterBufferOK                  ( true ),
     bNuteMeInPersonalMix             ( bNMuteMeInPersonalMix ),
+    iipmode			     ( ipmode ),
     iServerSockBufNumFrames          ( DEF_NET_BUF_SIZE_NUM_BL ),
     pSignalHandler                   ( CSignalHandler::getSingletonP() )
 {
@@ -391,7 +393,8 @@ bool CClient::SetServerAddr ( QString strNAddr )
 {
     CHostAddress HostAddress;
     if ( NetworkUtil().ParseNetworkAddress ( strNAddr,
-                                             HostAddress ) )
+                                             HostAddress,
+			   		     iipmode ) )
     {
         // apply address to the channel
         Channel.SetAddress ( HostAddress );

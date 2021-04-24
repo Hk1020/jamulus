@@ -114,7 +114,8 @@ public:
               const QString& strMIDISetup,
               const bool     bNoAutoJackConnect,
               const QString& strNClientName,
-              const bool     bNMuteMeInPersonalMix );
+              const bool     bNMuteMeInPersonalMix,
+	      int ipmode=0 );
 
     virtual ~CClient();
 
@@ -359,6 +360,7 @@ protected:
 
     bool                    bJitterBufferOK;
     bool                    bNuteMeInPersonalMix;
+    int			    iipmode;
     QMutex                  MutexDriverReinit;
 
     // server settings
