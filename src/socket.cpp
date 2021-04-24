@@ -61,7 +61,6 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
     int off = 0;
     //
     const char tos = (char) iQosNumber;  // Quality of Service
-    setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof(tos) );
 
     if (sockmode == 6)
     {
@@ -73,11 +72,13 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
         // allow to receive v6 and v4 requests
         setsockopt(UdpSocket, IPPROTO_IPV6, IPV6_V6ONLY, &off, sizeof(off));
         // allocate memory for network receive and send buffer in samples
+    	setsockopt ( UdpSocket, IPPROTO_IPV6, IPV6_TCLASS, &tos, sizeof(tos) );
     }
     else
     {
         // allow to receive ipv4 packet info (i.e. destination ip address through recvmsg
         setsockopt(UdpSocket, IPPROTO_IP, IP_PKTINFO, &on, sizeof(on));
+    	setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof(tos) );
     }
 #else
     char on = 1;
