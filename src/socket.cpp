@@ -59,6 +59,10 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
 #ifndef WIN32
     int on = 1;
     int off = 0;
+    //
+    const char tos = (char) iQosNumber;  // Quality of Service
+    setsockopt ( UdpSocket, IPPROTO_IP, IP_TOS, &tos, sizeof(tos) );
+
     if (sockmode == 6)
     {
         setsockopt(UdpSocket, IPPROTO_IPV6, IPV6_PKTINFO,  &on, sizeof(on));
