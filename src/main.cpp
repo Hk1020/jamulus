@@ -86,6 +86,7 @@ int main ( int argc, char** argv )
     QString      strCentralServer            = "";
     QString      strServerInfo               = "";
     QString      strServerPublicIP           = "";
+    QString      strServerBindIP             = "";
     QString      strServerListFilter         = "";
     QString      strWelcomeMessage           = "";
     QString      strClientName               = "";
@@ -481,6 +482,22 @@ int main ( int argc, char** argv )
         }
 
 
+        // Server Bind IP --------------------------------------------------
+        if ( GetStringArgument ( argc,
+                                 argv,
+                                 i,
+                                 "--serverbindip", // no short form
+                                 "--serverbindip",
+                                 strArgument ) )
+        {
+            strServerBindIP = strArgument;
+            qInfo() << qUtf8Printable( QString( "- server bind IP: %1" )
+                .arg( strServerBindIP ) );
+            CommandLineOptions << "--serverbindip";
+            continue;
+        }
+
+
         // Server info ---------------------------------------------------------
         if ( GetStringArgument ( argc,
                                  argv,
@@ -666,6 +683,15 @@ int main ( int argc, char** argv )
         }
     }
 
+    if ( !strServerBindIP.isEmpty() )
+    {
+        QHostAddress InetAddr;
+        if ( !InetAddr.setAddress ( strServerBindIP ) )
+        {
+            qWarning() << "Server Bind IP is invalid. Only plain IP addresses are supported.";
+        }
+    }
+
     // per definition: if we are in "GUI" server mode and no central server
     // address is given, we use the default central server address
     if ( !bIsClient && bUseGUI && strCentralServer.isEmpty() )
@@ -798,6 +824,7 @@ int main ( int argc, char** argv )
             // actual server object
             CServer Server ( iNumServerChannels,
                              strLoggingFileName,
+                             strServerBindIP,
                              iPortNumber,
                              iQosNumber,
                              strHTMLStatusFileName,
@@ -901,8 +928,8 @@ QString UsageArguments ( char **argv )
         "                        supported for headless server mode)\n"
         "  -n, --nogui           disable GUI\n"
         "  -p, --port            set the local port number\n"
-        "  -Q, --qos             set the quality of service DSCP value. Default is 128. Disable with 0 \n"
-        "                        (QoS is ignored by Windows, but see website for futher information)\n"
+        "  -Q, --qos             set the QoS value. Default is 128. Disable with 0\n"
+        "                        (see the Jamulus website to enable QoS on Windows)\n"
         "  -t, --notranslation   disable translation (use English language)\n"
         "  -v, --version         output version information and exit\n"
 	"  -4, --ipv4		 use IPv4 Protocol\n"
@@ -931,6 +958,7 @@ QString UsageArguments ( char **argv )
         "      --serverpublicip  specify your public IP address when\n"
         "                        running a slave and your own central server\n"
         "                        behind the same NAT\n"
+        "      --serverbindip    specify the IP address the server will bind to\n"
         "\nClient only:\n"
         "  -M, --mutestream      starts the application in muted state\n"
         "      --mutemyown       mute me in my personal mix (headless only)\n"

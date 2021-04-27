@@ -170,7 +170,7 @@ LED bar:      lbr
 #define AUTO_FADER_NOISE_THRESHOLD_DB    -40.0f
 
 // maximum number of fader groups (must be consistent to audiomixerboard implementation)
-#define MAX_NUM_FADER_GROUPS             4
+#define MAX_NUM_FADER_GROUPS             8
 
 // maximum number of recognized sound cards installed in the system
 #define MAX_NUMBER_SOUND_CARDS           129 // e.g. 16 inputs, 8 outputs + default entry (MacOS)
@@ -256,7 +256,7 @@ LED bar:      lbr
 
 // define Settings tab indexes
 #define SETTING_TAB_USER                 0
-#define SETTING_TAB_BASIC                1
+#define SETTING_TAB_AUDIONET             1
 #define SETTING_TAB_ADVANCED             2
 
 // common tool tip bottom line text

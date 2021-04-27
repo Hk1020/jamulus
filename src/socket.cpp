@@ -33,7 +33,7 @@
 #include <arpa/inet.h>
 #endif
 /* Implementation *************************************************************/
-void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
+void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber, const QString& strServerBindIP )
 {
 #ifdef _WIN32
     // for the Windows socket usage we have to start it up first
@@ -114,16 +114,16 @@ void CSocket::Init ( const quint16 iPortNumber, const quint16 iQosNumber )
     if ( sockmode == 4)
     {
 	    UdpSocket4InAddr.sin_family = AF_INET;
-	    UdpSocket4InAddr.sin_addr.s_addr = INADDR_ANY;
+            if (strServerBindIP.isEmpty()) {
+              UdpSocket4InAddr.sin_addr.s_addr = INADDR_ANY;
+            }
+            else {
+              UdpSocket4InAddr.sin_addr.s_addr = htonl ( QHostAddress( strServerBindIP ).toIPv4Address() );
+            }
     }
     //memset(&UdpSocketInAddr,0,sizeof(UdpSocketInAddr));
     UdpSocketInAddr.sin6_family      = AF_INET6;
     UdpSocketInAddr.sin6_addr       = in6addr_any;
-    if ( sockmode == 4)
-    {
-	    UdpSocket4InAddr.sin_family = AF_INET;
-	    UdpSocket4InAddr.sin_addr.s_addr = INADDR_ANY;
-    }
     // initialize the listening socket
     bool bSuccess;
 
